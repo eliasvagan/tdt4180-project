@@ -30,6 +30,7 @@ create table apparat(
 	apparatid int not null,
   apparatnavn text,
   apparatbrukbeskrivelse text
+  primary key (apparatid)
 );
 
 create table ovelseMedApparat(
@@ -37,7 +38,7 @@ create table ovelseMedApparat(
     ovelseID int not null,
     antallkg int,
     antallSett int,
-    apparatID int,
+    apparatID int not null,
     foreign key (apparatid) references apparat(apparatid),
     foreign key (ovelseid) references ovelse(ovelseid),
     primary key (ovelseid)
@@ -67,14 +68,14 @@ create table ovelsesGruppe(
 
 create table element(
 	ovelsesgruppeid int not null,
-  element text not null,
+  element VARCHAR(200) not null,
   foreign key (ovelsesgruppeid) references ovelsesgruppe(ovelsesgruppeid),
   primary key (ovelsesgruppeid, element)
 );
 
 create table ovelsesGruppeOvelseRelasjon(
 	ovelseid int not null,
-  ovelsesgruppe int not null,
+  ovelsesgruppeid int not null,
   foreign key (ovelseid) references ovelse(ovelseid),
   foreign key (ovelsesgruppeid) references ovelsesgruppe(ovelsesgruppeid),
 	primary key (ovelseid, ovelsesgruppeid)

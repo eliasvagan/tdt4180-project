@@ -34,8 +34,8 @@ public class Ovelse {
         this.beskrivelse = beskrivelse;
     }
 
-    public String getType() {
-        return Character.toString(type);
+    public char getType() {
+        return type;
     }
 
     public String getName() {
