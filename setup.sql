@@ -1,29 +1,29 @@
 create database treningsdagbok; /* Er ikke sikkert du trenger disse to linjene */
 use treningsdagbok; /* Er ikke sikkert du trenger disse to linjene */
 
-create table treningsøkt(
-	øktid int not null,
-    primary key (øktid),
-    dato date,
-    tidspunkt time,
-    varighet time,
-    form int,
-    prestasjon int,
-    check(form<11 ^ form>0)
+create table treningsokt(
+	oktid int not null,
+  primary key (oktid),
+  dato date,
+  tidspunkt time,
+  varighet time,
+  form int,
+  prestasjon int,
+  check(form<11 ^ form>0)
 );
 
-create table øktnotat(
-	øktid int not null,
-    notatid int not null,
-    notatinformasjon text,
-    foreign key (øktid) references treningsøkt(øktid),
-    primary key(øktid, notatid)
+create table oktnotat(
+	oktid int not null,
+  notatid int not null,
+  notatinformasjon text,
+  foreign key (oktid) references treningsokt(oktid),
+  primary key(oktid, notatid)
 );
 
-create table øvelse(
-	øvelseID int not null,
+create table ovelse(
+	ovelseID int not null,
 	navn text,
-    primary key(ovelseID)
+  primary key(ovelseID)
 );
 
 create table apparat(
@@ -32,50 +32,50 @@ create table apparat(
   apparatbrukbeskrivelse text
 );
 
-create table øvelseMedApparat(
+create table ovelseMedApparat(
 	navn text,
-    øvelseID int not null,
+    ovelseID int not null,
     antallkg int,
     antallSett int,
     apparatID int,
     foreign key (apparatid) references apparat(apparatid),
-    foreign key (øvelseid) references øvelse(øvelseid),
-    primary key (øvelseid)
+    foreign key (ovelseid) references ovelse(ovelseid),
+    primary key (ovelseid)
 );
 
-create table øvelseUtenApparat(
+create table ovelseUtenApparat(
 	navn text,
-    øvelseid int not null,
-    tekstBeskrivelse text,
-    foreign key (øvelseid) references øvelse(øvelseid),
-    primary key (øvelseid)
+  ovelseid int not null,
+  tekstBeskrivelse text,
+  foreign key (ovelseid) references ovelse(ovelseid),
+  primary key (ovelseid)
 );
 
-create table treningsøktØvelse(
-	øktid int not null,
-    øvelseid int not null,
-    foreign key (øktid) references treningsøkt(øktid),
-    foreign key (øvelseid) references øvelse(øvelseid),
-    primary key (øktid, øvelseid)
+create table treningsoktOvelse(
+	oktid int not null,
+  ovelseid int not null,
+  foreign key (oktid) references treningsokt(oktid),
+  foreign key (ovelseid) references ovelse(ovelseid),
+  primary key (oktid, ovelseid)
 );
 
-create table øvelsesGruppe(
-	øvelsesgruppeid int not null,
-    øvelsesgruppenavn text,
-    primary key (øvelsesgruppeid)
+create table ovelsesGruppe(
+	ovelsesgruppeid int not null,
+  ovelsesgruppenavn text,
+  primary key (ovelsesgruppeid)
 );
 
 create table element(
-	øvelsesgruppeid int not null,
-    element text not null,
-    foreign key (øvelsesgruppeid) references øvelsesgruppe(øvelsesgruppeid),
-    primary key (øvelsesgruppeid, element)
+	ovelsesgruppeid int not null,
+  element text not null,
+  foreign key (ovelsesgruppeid) references ovelsesgruppe(ovelsesgruppeid),
+  primary key (ovelsesgruppeid, element)
 );
 
-create table øvelsesGruppeØvelseRelasjon(
-	øvelseid int not null,
-    øvelsesgruppe int not null,
-    foreign key (øvelseid) references øvelse(øvelseid),
-    foreign key (øvelsesgruppeid) references øvelsesgruppe(øvelsesgruppeid),
-	primary key (øvelseid, øvelsesgruppeid)
+create table ovelsesGruppeOvelseRelasjon(
+	ovelseid int not null,
+  ovelsesgruppe int not null,
+  foreign key (ovelseid) references ovelse(ovelseid),
+  foreign key (ovelsesgruppeid) references ovelsesgruppe(ovelsesgruppeid),
+	primary key (ovelseid, ovelsesgruppeid)
 );

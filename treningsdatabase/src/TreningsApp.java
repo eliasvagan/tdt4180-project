@@ -1,26 +1,42 @@
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TreningsApp extends Application {
+public class TreningsApp {
+    private Database database;
+    private List<Ovelse> ovelser;
 
-    private Stage primaryStage;
-
-    public static void main(String[] args) {
-        launch(args);
+    public TreningsApp() {
+        this.ovelser = new ArrayList<Ovelse>();
+        this.database = new Database("TreningsDatabasen");
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        Thread.currentThread().setName("JavaFX");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
+    public String testConnection() {
+        try {
+            this.database.connect();
+            this.database.disconnect();
+            return "Koblet til: " + this.database.getConnection();
+        } catch(Exception e) {
+            return "Feil: "+ e.getMessage();
+        }
+    }
 
-        AnchorPane root = (AnchorPane) loader.load();
-        Scene scene = new Scene(root);
+    public void addOvelse(Ovelse o) {
+        this.ovelser.add(o);
+    }
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    public String listOvelser() {
+        StringBuilder sb = new StringBuilder();
+        this.ovelser.forEach((e) -> sb.append(e.toString() + "\n"));
+        return sb.toString();
+    }
+
+    public String listTable(String[] columns, String table) {
+        String s;
+        try {
+            s = this.database.select(columns, table);
+        } catch(Exception e) {
+            s = e.getMessage();
+        }
+        return s;
     }
 }

@@ -4,12 +4,13 @@ import java.util.Properties;
 public abstract class DBConn {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:8889/treningsdagbok";
+//    static final String DB_URL = "jdbc:mysql://localhost:8889/treningsdagbok";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/treningsdagbok";
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "root";
-    //static final String PASS = "super-secret-password";
+    static final String PASS = "123345";
+    static final Boolean USING_PASSWORD = false;
 
     private Connection conn;
     public DBConn () {
@@ -17,11 +18,11 @@ public abstract class DBConn {
     public void connect() {
         try {
             Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, USING_PASSWORD ? PASS : null);
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Unable to connect", e);
+            throw new RuntimeException("Unable to connect, " + e.getMessage(), e);
         }
     }
     public String getConnection() {
@@ -35,6 +36,7 @@ public abstract class DBConn {
         }
 
     }
+    
     public String select(String[] columns, String table) {
         Statement stmt = null;
         StringBuilder result = new StringBuilder();
@@ -50,7 +52,7 @@ public abstract class DBConn {
 
             while (rs.next()) {
                 for (String col: columns) {
-                    result.append(rs.getString(col) + ", ");
+                    result.append(rs.getString(col) + " ");
                 }
                 result.append("\n");
             }
@@ -73,6 +75,5 @@ public abstract class DBConn {
             }//end finally try
         }
         return result.toString();
-
     }
 }

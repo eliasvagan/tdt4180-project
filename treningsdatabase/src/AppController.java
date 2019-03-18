@@ -12,31 +12,19 @@ public class AppController {
     @FXML TextField aparatAparat;
     @FXML TextField aparatKg;
     @FXML TextField aparatSett;
-
     @FXML TextField utenOvelse;
     @FXML TextArea utenBeskrivelse;
 
-    private Database database;
     private String errors = "";
-    private List<Ovelse> ovelser;
+    private TreningsApp app;
+
 
     public AppController() {
-        this.ovelser = new ArrayList<Ovelse>();
-        this.database = new Database("TreningsDatabasen");
-        // TODO: Få dette til å funke -> updateScreen("Appen har startet.");
+        this.app = new TreningsApp();
     }
 
     @FXML public void initialize(){
-        try {
-            this.database.connect();
-            updateScreen("Database connection: " + this.database.getConnection());
-            this.database.disconnect();
-        } catch(Exception e) {
-            this.errors = "Databasefeil: " + e.getMessage();
-            this.updateScreen();
-        }
-
-
+        updateScreen(this.app.testConnection());
     }
 
     @FXML public void regOvingAparat(){
@@ -66,6 +54,7 @@ public class AppController {
                     Integer.parseInt(aparatSett.getText())
                 )
             );
+            clearFields();
         } catch(Exception e ) {
             this.errors = e.getMessage();
         }
@@ -76,7 +65,7 @@ public class AppController {
         if (utenOvelse.getText().equals("") ||
             utenBeskrivelse.getText().equals(""))
         {
-            errors = "Ett eller flere tomme felter";
+            errors = "Ett eller flere tomme felter.";
             updateScreen();
             return;
         }
@@ -87,6 +76,7 @@ public class AppController {
                     utenBeskrivelse.getText()
                 )
             );
+            clearFields();
         } catch(Exception e ) {
             this.errors = e.getMessage();
         }
@@ -94,7 +84,7 @@ public class AppController {
     }
 
     private void addOvelse(Ovelse o) {
-        this.ovelser.add(o);
+        this.app.addOvelse(o);
     }
     private void updateScreen(String message) {
         String s = message;
@@ -102,27 +92,45 @@ public class AppController {
         screen.setText(s);
         this.errors = "";
     }
+
     private void updateScreen() {
-        StringBuilder s = new StringBuilder();
-        this.ovelser.forEach((e) -> s.append(e.toString() + "\n"));
-
-        s.append("\n" + this.errors);
-
-        screen.setText(s.toString());
+        screen.setText(this.app.listOvelser() + this.errors);
         this.errors = "";
     }
 
     @FXML
-    private void queryTester() {
-        try {
-            String[] kolonner = {"apparatid", "apparatnavn", "apparatbrukbeskrivelse"};
-            String tabell = "apparat";
-            this.updateScreen(
-                this.database.select(kolonner, tabell)
-            );
-        } catch(Exception e) {
-            this.errors = e.getMessage();
-        }
+    private void showApparater() {
+        String[] kolonner = {"apparatid", "apparatnavn", "apparatbrukbeskrivelse"};
+        String tabell = "apparat";
+        this.updateScreen(app.listTable(kolonner, tabell));
+    }
+    @FXML
+    private void showOvelser() {
+        String[] kolonner = {"ovelseid", "navn"};
+        String tabell = "ovelse";
+        this.updateScreen(app.listTable(kolonner, tabell));
+    }
+    @FXML
+    private void showOvelsesgrupper() {
+        String[] kolonner = {"ovelsesgruppeid", "ovelsesgruppenavn"};
+        String tabell = "ovelsesgruppe";
+        this.updateScreen(app.listTable(kolonner, tabell));
+    }
+
+    @FXML
+    private void showTreningsokter() {
+        String[] kolonner = {"oktid", "dato", "tidspunkt", "varighet", "form", "prestasjon"};
+        String tabell = "treningsokt";
+        this.updateScreen(app.listTable(kolonner, tabell));
+    }
+
+    private void clearFields() {
+        this.aparatOvelse.setText("");
+        this.aparatAparat.setText("");
+        this.aparatKg.setText("");
+        this.aparatSett.setText("");
+        this.utenOvelse.setText("");
+        this.utenBeskrivelse.setText("");
     }
 
 
