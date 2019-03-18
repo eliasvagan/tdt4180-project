@@ -5,7 +5,6 @@ import javafx.scene.control.TextField;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class AppController {
     @FXML TextArea screen;
 
@@ -17,22 +16,26 @@ public class AppController {
     @FXML TextField utenOvelse;
     @FXML TextArea utenBeskrivelse;
 
-    private DBConn dbconn;
+    private Database database;
     private String errors = "";
     private List<Ovelse> ovelser;
 
     public AppController() {
         this.ovelser = new ArrayList<Ovelse>();
+        this.database = new Database("TreningsDatabasen");
         // TODO: Få dette til å funke -> updateScreen("Appen har startet.");
     }
 
     @FXML public void initialize(){
         try {
-            this.dbconn.connect();
+            this.database.connect();
+            updateScreen("Database connection: " + this.database.getConnection());
+            this.database.disconnect();
         } catch(Exception e) {
             this.errors = "Databasefeil: " + e.getMessage();
-            updateScreen();
+            this.updateScreen();
         }
+
 
     }
 
@@ -54,13 +57,18 @@ public class AppController {
             updateScreen();
             return;
         }
-        this.addOvelse(new Ovelse(
-                aparatOvelse.getText(),
-                aparatAparat.getText(),
-                Double.parseDouble(aparatKg.getText()),
-                Integer.parseInt(aparatSett.getText())
-        ));
-
+        try {
+            this.addOvelse(
+                new Ovelse(
+                    aparatOvelse.getText(),
+                    aparatAparat.getText(),
+                    Double.parseDouble(aparatKg.getText()),
+                    Integer.parseInt(aparatSett.getText())
+                )
+            );
+        } catch(Exception e ) {
+            this.errors = e.getMessage();
+        }
         updateScreen();
     }
 
@@ -72,12 +80,17 @@ public class AppController {
             updateScreen();
             return;
         }
-        this.addOvelse(new Ovelse(
-                utenOvelse.getText(),
-                utenBeskrivelse.getText()
-        ));
+        try {
+            this.addOvelse(
+                new Ovelse(
+                    utenOvelse.getText(),
+                    utenBeskrivelse.getText()
+                )
+            );
+        } catch(Exception e ) {
+            this.errors = e.getMessage();
+        }
         updateScreen();
-
     }
 
     private void addOvelse(Ovelse o) {
@@ -97,6 +110,19 @@ public class AppController {
 
         screen.setText(s.toString());
         this.errors = "";
+    }
+
+    @FXML
+    private void queryTester() {
+        try {
+            String[] kolonner = {"apparatid", "apparatnavn", "apparatbrukbeskrivelse"};
+            String tabell = "apparat";
+            this.updateScreen(
+                this.database.select(kolonner, tabell)
+            );
+        } catch(Exception e) {
+            this.errors = e.getMessage();
+        }
     }
 
 

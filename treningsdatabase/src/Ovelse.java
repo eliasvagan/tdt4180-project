@@ -9,7 +9,10 @@ public class Ovelse {
 
     private String beskrivelse;
 
-    public Ovelse(String name, String aparat, double kg, int sett) {
+    public Ovelse(String name, String aparat, double kg, int sett){
+        if (kg <= 0 || sett <= 0) {
+            throw new IllegalArgumentException("Negative tall.");
+        }
         this.type = 'A'; // Aparat
         this.name = name;
         this.aparat = aparat;

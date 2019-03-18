@@ -2,21 +2,77 @@ import java.sql.*;
 import java.util.Properties;
 
 public abstract class DBConn {
+    // JDBC driver name and database URL
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost:8889/treningsdagbok";
+
+    //  Database credentials
+    static final String USER = "root";
+    static final String PASS = "root";
+    //static final String PASS = "super-secret-password";
+
     private Connection conn;
     public DBConn () {
     }
     public void connect() {
         try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            // Properties for user and password. Here the user and password are both 'paulr'
-            Properties p = new Properties();
-            p.put("user", "eliastoc_admin");
-            p.put("password", "MeY6Sm17mNry3I");
-            conn = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1/avtalebok?autoReconnect=true&useSSL=false",p);
-        } catch (Exception e)
-        {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+        } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Unable to connect", e);
         }
+    }
+    public String getConnection() {
+        return this.conn.toString();
+    }
+    public void disconnect() {
+        try {
+            this.conn.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    public String select(String[] columns, String table) {
+        Statement stmt = null;
+        StringBuilder result = new StringBuilder();
+        try{
+            this.connect();
+
+            System.out.println("Creating statement...");
+            stmt = this.conn.createStatement();
+
+            String sql ="SELECT " + String.join(", ", columns) + " FROM " + table;
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                for (String col: columns) {
+                    result.append(rs.getString(col) + ", ");
+                }
+                result.append("\n");
+            }
+
+            rs.close();
+            stmt.close();
+            this.conn.close();
+        } catch(Exception e) {
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            //finally block used to close resources
+            try {
+                if(stmt!=null)
+                    stmt.close();
+                if(conn!=null)
+                    conn.close();
+            } catch(SQLException se){
+                se.printStackTrace();
+            }//end finally try
+        }
+        return result.toString();
+
     }
 }

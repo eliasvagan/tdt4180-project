@@ -6,8 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="630.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:id="root" fx:controller="AppController">
+<AnchorPane fx:id="root" prefHeight="630.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppController">
    <children>
       <TextArea fx:id="screen" layoutX="14.0" layoutY="14.0" prefHeight="291.0" prefWidth="565.0" />
       <AnchorPane layoutX="14.0" layoutY="343.0" prefHeight="263.0" prefWidth="200.0" style="-fx-background-color: #DDDDDD;">
@@ -21,7 +20,7 @@
             <TextField fx:id="aparatKg" layoutX="3.0" layoutY="151.0" prefHeight="27.0" prefWidth="192.0" />
             <Label layoutX="3.0" layoutY="178.0" text="Antall sett" />
             <TextField fx:id="aparatSett" layoutX="3.0" layoutY="195.0" prefHeight="27.0" prefWidth="192.0" />
-            <Button onAction="#regOvingAparat" layoutX="4.0" layoutY="229.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="192.0" text="Registrer øvelse" />
+            <Button layoutX="4.0" layoutY="229.0" mnemonicParsing="false" onAction="#regOvingAparat" prefHeight="27.0" prefWidth="192.0" text="Registrer øvelse" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="224.0" layoutY="343.0" prefHeight="263.0" prefWidth="200.0" style="-fx-background-color: #DDDDDD;">
@@ -31,8 +30,9 @@
             <TextField fx:id="utenOvelse" layoutX="4.0" layoutY="53.0" prefHeight="27.0" prefWidth="192.0" />
             <Label layoutX="4.0" layoutY="80.0" text="Beskrivelse av øvelsen" />
             <TextArea fx:id="utenBeskrivelse" layoutX="7.0" layoutY="96.0" prefHeight="119.0" prefWidth="185.0" />
-            <Button onAction="#regOvingUten" layoutX="4.0" layoutY="222.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="192.0" text="Registrer øvelse" />
+            <Button layoutX="4.0" layoutY="222.0" mnemonicParsing="false" onAction="#regOvingUten" prefHeight="27.0" prefWidth="192.0" text="Registrer øvelse" />
          </children>
       </AnchorPane>
+      <Button id="testButton" onAction="#queryTester" layoutX="442.0" layoutY="343.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="166.0" text="Test query" textAlignment="CENTER" />
    </children>
 </AnchorPane>

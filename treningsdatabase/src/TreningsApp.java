@@ -20,11 +20,7 @@ public class TreningsApp extends Application {
         AnchorPane root = (AnchorPane) loader.load();
         Scene scene = new Scene(root);
 
-
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
     }
 }

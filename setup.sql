@@ -28,8 +28,8 @@ create table øvelse(
 
 create table apparat(
 	apparatid int not null,
-    apparatnavn text,
-    apparatbrukbeskrivelse text
+  apparatnavn text,
+  apparatbrukbeskrivelse text
 );
 
 create table øvelseMedApparat(
