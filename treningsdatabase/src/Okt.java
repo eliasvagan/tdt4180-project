@@ -1,19 +1,20 @@
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Okt {
     private List<Ovelse> ovelser;
-    private Date dato;
-    private Time tidspunk;
-    private Time varighet;
+    private LocalDate dato;
+    private String tidspunkt;
+    private String varighet;
     private int form;
     private int prestasjon;
 
-    public Okt(Date dato, Time tidspunk, Time varighet, int form, int prestasjon) {
+    public Okt(LocalDate dato, String tidspunkt, String varighet, int form, int prestasjon) {
         this.dato = dato;
-        this.tidspunk = tidspunk;
+        this.tidspunkt = tidspunkt;
         this.varighet = varighet;
         this.form = form;
         this.prestasjon = prestasjon;
@@ -26,7 +27,7 @@ public class Okt {
         StringBuilder sb = new StringBuilder();
         sb.append(
                 "Økt: " + this.dato +
-                ", kl." + this.tidspunk +
+                ", kl." + this.tidspunkt +
                 ", varighet: " + this.varighet +
                 ", form: " + this.form +
                 ", prestasjon: " + this.prestasjon + "\n"
@@ -40,6 +41,26 @@ public class Okt {
             }
         }
         return sb.toString();
+    }
+
+    public LocalDate getDato() {
+        return dato;
+    }
+
+    public String getTidspunkt() {
+        return tidspunkt;
+    }
+
+    public String getVarighet() {
+        return varighet;
+    }
+
+    public int getForm() {
+        return form;
+    }
+
+    public int getPrestasjon() {
+        return prestasjon;
     }
 
     public List<Ovelse> getOvelser() {

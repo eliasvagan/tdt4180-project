@@ -25,9 +25,7 @@ public abstract class DBConn {
             throw new RuntimeException("Unable to connect, " + e.getMessage(), e);
         }
     }
-    public String getConnection() {
-        return this.conn.toString();
-    }
+
     public void disconnect() {
         try {
             this.conn.close();
@@ -36,7 +34,9 @@ public abstract class DBConn {
         }
 
     }
-
+    public String getConnection() {
+        return this.conn.toString();
+    }
     public void query(String sql) {
         try {
             this.connect();
@@ -50,7 +50,7 @@ public abstract class DBConn {
         }
 
     }
-    
+
     public String select(String[] columns, String table) {
         Statement stmt = null;
         StringBuilder result = new StringBuilder();

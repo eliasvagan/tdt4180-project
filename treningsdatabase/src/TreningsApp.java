@@ -11,7 +11,6 @@ public class TreningsApp {
     public TreningsApp() {
         this.ovelser = new ArrayList<Ovelse>();
         this.database = new Database("TreningsDatabasen");
-        this.syncObjects();
     }
 
     public String testConnection() {
@@ -29,7 +28,6 @@ public class TreningsApp {
     }
 
     public String listOvelser() {
-        this.syncObjects();
         StringBuilder sb = new StringBuilder();
         this.ovelser.forEach((e) -> sb.append(e.toString() + "\n"));
         return sb.toString();
@@ -70,27 +68,29 @@ public class TreningsApp {
         }
     }
 
-    public void registrerOkt(Date dato, Time tidspunkt, Time varighet, int form, int prestasjon) {
-
-        Okt okt = new Okt(dato, tidspunkt, varighet, form, prestasjon);
+    public void registrerOkt(Okt okt) { // TODO: Send inn økt og tilhørende øvelser i databasen
         try {
-            this.database.query(
-                    "INSERT INTO treningsokt (dato, tidspunkt, varighet, form, prestasjon) VALUES (" +
-                    dato + ", " + tidspunkt + ", " + varighet + ", " + form + ", "+ prestasjon +
+            for (Ovelse o : okt.getOvelser()) { // For hver øvelse i økten, insert i ovelse
+                this.database.query(
+                "INSERT INTO ovelse (navn, antallkg, aparat, antallSett, tekstBeskrivelse) VALUES (" +
+                    o.getName() + ", " + o.getKg() + ", " + o.getApparat() + ", " + o.getSett() + " mangler beskrivelse atm " +
                     ");"
+                );
+            }
+            this.database.query( // TODO: Man må parse okt.getTidspunkt() og okt.getVarighet() til sql-tid fra String som de er nå!
+            "INSERT INTO treningsokt (dato, tidspunkt, varighet, form, prestasjon) VALUES (" +
+                okt.getDato() + ", " + okt.getTidspunkt() + ", " + okt.getVarighet() + ", " + okt.getForm() + ", "+ okt.getPrestasjon() +
+                ");"
+            );
+            this.database.query( // Of
+            "INSERT INTO treningsoktOvelse (oktid, ovelseid) VALUES (" +
+                //TODO: Hvordan får vi idene til øvelserne egt?
+                ");"
             );
 
         } catch(Exception e) {
             e.printStackTrace();
         }
-        // TODO: Send inn økt og tilhørende øvelser i databasen
-    }
-
-
-    private void syncObjects() {
-        String[] c = {"oktid", "dato", "tidspunkt", "varighet", "form", "prestasjon"};
-        String t = "ovelse";
-        // TODO: Oppdater appens objekter med spørringer fra databasen.
 
     }
 }

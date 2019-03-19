@@ -1,7 +1,12 @@
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +20,12 @@ public class AppController {
     @FXML TextField utenOvelse;
     @FXML TextArea utenBeskrivelse;
 
+    @FXML DatePicker oktDato;
+    @FXML TextField oktTidspunkt;
+    @FXML TextField oktVarighet;
+    @FXML ComboBox oktForm;
+    @FXML ComboBox oktPrestasjon;
+
     private String errors = "";
     private TreningsApp app;
 
@@ -25,6 +36,15 @@ public class AppController {
 
     @FXML public void initialize(){
         updateScreen(this.app.testConnection());
+
+        oktForm.getItems().removeAll(oktForm.getItems());
+        oktPrestasjon.getItems().removeAll(oktPrestasjon.getItems());
+        for (int i = 0; i <= 10; i++) {
+            oktForm.getItems().add(i);
+            oktPrestasjon.getItems().add(i);
+        }
+        oktForm.getSelectionModel().select(5);
+        oktPrestasjon.getSelectionModel().select(5);
     }
 
     @FXML public void regOvingAparat(){
@@ -86,6 +106,24 @@ public class AppController {
     private void addOvelse(Ovelse o) {
         this.app.addOvelse(o);
     }
+
+    @FXML private void registrerOkt() {
+
+        try {
+            Okt okt = new Okt(
+                oktDato.getValue(),
+                oktTidspunkt.getText(),
+                oktVarighet.getText(),
+                Integer.parseInt(oktForm.getSelectionModel().getSelectedItem().toString()),
+                Integer.parseInt(oktPrestasjon.getSelectionModel().getSelectedItem().toString())
+            );
+            this.app.registrerOkt(okt);
+        } catch(Exception e) {
+            updateScreen(e.getMessage());
+        }
+
+    }
+
     private void updateScreen(String message) {
         String s = message;
         s += ("\n" + this.errors);

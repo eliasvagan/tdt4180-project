@@ -9,32 +9,31 @@ public class Ovelse {
 
     private String beskrivelse;
 
-    public Ovelse(boolean harApparat, String name, String apparat, double kg, int sett){
+    public Ovelse(String name, String apparat, double kg, int sett){
         if (kg <= 0 || sett <= 0) {
             throw new IllegalArgumentException("Negative tall.");
         }
-        this.harApparat = harApparat; // Apparat true eller false
+        this.harApparat = true; // Apparat true eller false
         this.name = name;
         this.apparat = apparat;
         this.kg = kg;
         this.sett = sett;
     }
-
-    public String toString() {
-        if (this.harApparat == true) {
-            return this.name + ", " + this.apparat + ", " + this.kg + "kg * " + this.sett;
-        } else {
-            return this.name + ", " + this.beskrivelse;
-        }
-    }
-
     public Ovelse(String name, String beskrivelse) {
         this.harApparat = false; //Uten apparat
         this.name = name;
         this.beskrivelse = beskrivelse;
     }
 
-    public char getHarApparat() {
+    public String toString() {
+        if (this.harApparat) {
+            return this.name + ", " + this.apparat + ", " + this.kg + "kg * " + this.sett;
+        } else {
+            return this.name + ", " + this.beskrivelse;
+        }
+    }
+
+    public boolean getHarApparat() {
         return harApparat;
     }
 
