@@ -4,12 +4,12 @@ import java.util.Properties;
 public abstract class DBConn {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:8889/treningsdagbok";
+    static final String DB_URL = "jdbc:mysql://remotemysql.com:3306/kWRDsX4WgA";
     //static final String DB_URL = "jdbc:mysql://localhost:3306/treningsdagbok";
 
     //  Database credentials
-    static final String USER = "root";
-    static final String PASS = "root";
+    static final String USER = "kWRDsX4WgA";
+    static final String PASS = "uRSbg92smi";
     static final Boolean USING_PASS = true;
 
     private Connection conn;
