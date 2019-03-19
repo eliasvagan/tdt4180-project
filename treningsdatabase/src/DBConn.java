@@ -4,13 +4,13 @@ import java.util.Properties;
 public abstract class DBConn {
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-//    static final String DB_URL = "jdbc:mysql://localhost:8889/treningsdagbok";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/treningsdagbok";
+    static final String DB_URL = "jdbc:mysql://localhost:8889/treningsdagbok";
+    //static final String DB_URL = "jdbc:mysql://localhost:3306/treningsdagbok";
 
     //  Database credentials
     static final String USER = "root";
-    static final String PASS = "123345";
-    static final Boolean USING_PASSWORD = false;
+    static final String PASS = "root";
+    static final Boolean USING_PASS = true;
 
     private Connection conn;
     public DBConn () {
@@ -18,7 +18,7 @@ public abstract class DBConn {
     public void connect() {
         try {
             Class.forName(JDBC_DRIVER);
-            conn = DriverManager.getConnection(DB_URL, USER, USING_PASSWORD ? PASS : null);
+            conn = DriverManager.getConnection(DB_URL, USER, USING_PASS ? PASS : null);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -33,6 +33,20 @@ public abstract class DBConn {
             this.conn.close();
         } catch(Exception e) {
             e.printStackTrace();
+        }
+
+    }
+
+    public void query(String sql) {
+        try {
+            this.connect();
+            System.out.println("Creating statement...\n" + sql);
+            Statement stmt = this.conn.createStatement();
+            stmt.executeQuery(sql);
+            stmt.close();
+            this.conn.close();
+        } catch(Exception e) {
+            throw new RuntimeException("Feil ved SQL-query", e);
         }
 
     }
