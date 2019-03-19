@@ -29,7 +29,7 @@ public class Ovelse {
     }
 
     public Ovelse(String name, String beskrivelse) {
-        this.harApparat = 'U'; //Uten apparat
+        this.harApparat = false; //Uten apparat
         this.name = name;
         this.beskrivelse = beskrivelse;
     }
