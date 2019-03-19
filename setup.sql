@@ -8,8 +8,8 @@ create table treningsokt(
   tidspunkt time,
   varighet time,
   form int,
-  prestasjon int,
-  check(form<11 ^ form>0)
+  prestasjon int
+  /* TODO: Feil her -> check (form >= 1 and form <= 11)*/
 );
 
 create table oktnotat(
@@ -29,7 +29,7 @@ create table ovelse(
 create table apparat(
 	apparatid int not null,
   apparatnavn text,
-  apparatbrukbeskrivelse text
+  apparatbrukbeskrivelse text,
   primary key (apparatid)
 );
 
