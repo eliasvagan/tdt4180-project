@@ -33,7 +33,7 @@ public class Okt {
         );
         for (Ovelse o : this.ovelser) {
             sb.append(" - ");
-            if (o.getType() == 'A') {
+            if (o.getHarApparat() == true) {
                 sb.append("Apparatøvelse: " + o.toString());
             } else {
                 sb.append("Øvelse uten apparat: " + o.toString());
