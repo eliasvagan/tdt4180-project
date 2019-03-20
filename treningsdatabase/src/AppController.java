@@ -17,7 +17,7 @@ public class AppController {
     @FXML TextArea apparatBeskrivelse;
 
     @FXML TextField aparatOvelse;
-    @FXML TextField aparatAparat;
+    @FXML ComboBox aparatAparat;
     @FXML TextField aparatKg;
     @FXML TextField aparatSett;
     @FXML TextField utenOvelse;
@@ -39,9 +39,11 @@ public class AppController {
 
     @FXML public void initialize(){
         updateScreen(this.app.testConnection());
+        updateApparatDropdown();
 
         oktForm.getItems().removeAll(oktForm.getItems());
         oktPrestasjon.getItems().removeAll(oktPrestasjon.getItems());
+
         for (int i = 0; i <= 10; i++) {
             oktForm.getItems().add(i);
             oktPrestasjon.getItems().add(i);
@@ -50,21 +52,34 @@ public class AppController {
         oktPrestasjon.getSelectionModel().select(5);
     }
 
+    private void updateApparatDropdown() {
+        try {
+            aparatAparat.getItems().removeAll(oktForm.getItems());
+            for (String a : this.app.getApparatValg().split("\n")) {
+                aparatAparat.getItems().add(a);
+            }
+            aparatAparat.getSelectionModel().select(0);
+        } catch(Exception e) {
+            this.updateScreen(e.getMessage());
+        }
+    }
+
     @FXML private void regApparat() {
         try {
             this.app.registrerApparat(
                 apparatNavn.getText(),
                 apparatBeskrivelse.getText()
             );
+            this.showApparater();
+            this.clearFields();
+            this.updateApparatDropdown();
         } catch (Exception e){
             this.updateScreen(e.getMessage());
         }
-
     }
 
     @FXML private void regOvingAparat(){
         if (aparatOvelse.getText().equals("") ||
-            aparatAparat.getText().equals("") ||
             aparatKg.getText().equals("") ||
             aparatSett.getText().equals(""))
         {
@@ -81,10 +96,10 @@ public class AppController {
             return;
         }
         try {
-            this.addOvelse(
+            this.app.addOvelse(
                 new Ovelse(
                     aparatOvelse.getText(),
-                    aparatAparat.getText(),
+                    Character.getNumericValue(aparatAparat.getSelectionModel().getSelectedItem().toString().charAt(0)),
                     Double.parseDouble(aparatKg.getText()),
                     Integer.parseInt(aparatSett.getText())
                 )
@@ -105,7 +120,7 @@ public class AppController {
             return;
         }
         try {
-            this.addOvelse(
+            this.app.addOvelse(
                 new Ovelse(
                     utenOvelse.getText(),
                     utenBeskrivelse.getText()
@@ -116,10 +131,6 @@ public class AppController {
             this.errors = e.getMessage();
         }
         updateScreen();
-    }
-
-    private void addOvelse(Ovelse o) {
-        this.app.addOvelse(o);
     }
 
     @FXML private void registrerOkt() {
@@ -133,6 +144,7 @@ public class AppController {
                 Integer.parseInt(oktPrestasjon.getSelectionModel().getSelectedItem().toString())
             );
             this.app.registrerOkt(okt);
+            this.showTreningsokter();
         } catch(Exception e) {
             updateScreen(e.getMessage());
         }
@@ -159,15 +171,10 @@ public class AppController {
     }
     @FXML
     private void showOvelser() {
-        String[] kolonner = {"ovelseid", "navn"};
+        String[] kolonner = {"ovelseid", "navn", "antallkg", "aparat", "apparatid", "antallSett", "apparatID", "tekstBeskrivelse"};
         String tabell = "ovelse";
         this.updateScreen(app.listTable(kolonner, tabell));
-    }
-    @FXML
-    private void showOvelsesgrupper() {
-        String[] kolonner = {"ovelsesgruppeid", "ovelsesgruppenavn"};
-        String tabell = "ovelsesgruppe";
-        this.updateScreen(app.listTable(kolonner, tabell));
+
     }
 
     @FXML
@@ -179,11 +186,12 @@ public class AppController {
 
     private void clearFields() {
         this.aparatOvelse.setText("");
-        this.aparatAparat.setText("");
         this.aparatKg.setText("");
         this.aparatSett.setText("");
         this.utenOvelse.setText("");
         this.utenBeskrivelse.setText("");
+        this.apparatNavn.setText("");
+        this.apparatBeskrivelse.setText("");
     }
 
 

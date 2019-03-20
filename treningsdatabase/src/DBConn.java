@@ -37,12 +37,12 @@ public abstract class DBConn {
     public String getConnection() {
         return this.conn.toString();
     }
-    public void query(String sql) {
+    public void update(String sql) {
         try {
             this.connect();
             System.out.println("Creating statement...\n" + sql);
             Statement stmt = this.conn.createStatement();
-            stmt.executeQuery(sql);
+            stmt.executeUpdate(sql);
             System.out.println("Successfully executed query.");
             stmt.close();
             this.conn.close();

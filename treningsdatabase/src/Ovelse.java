@@ -3,19 +3,19 @@ public class Ovelse {
     private boolean harApparat;
 
     private String name;
-    private String apparat;
+    private int apparatID;
     private double kg;
     private int sett;
 
     private String beskrivelse;
 
-    public Ovelse(String name, String apparat, double kg, int sett){
+    public Ovelse(String name, int apparatID, double kg, int sett){
         if (kg <= 0 || sett <= 0) {
             throw new IllegalArgumentException("Negative tall.");
         }
         this.harApparat = true; // Apparat true eller false
         this.name = name;
-        this.apparat = apparat;
+        this.apparatID = apparatID;
         this.kg = kg;
         this.sett = sett;
     }
@@ -27,7 +27,7 @@ public class Ovelse {
 
     public String toString() {
         if (this.harApparat) {
-            return this.name + ", " + this.apparat + ", " + this.kg + "kg * " + this.sett;
+            return this.name + ", ApparatID: " + this.apparatID + ", " + this.kg + "kg * " + this.sett;
         } else {
             return this.name + ", " + this.beskrivelse;
         }
@@ -41,8 +41,8 @@ public class Ovelse {
         return name;
     }
 
-    public String getApparat() {
-        return apparat;
+    public int getApparatID() {
+        return apparatID;
     }
 
     public double getKg() {

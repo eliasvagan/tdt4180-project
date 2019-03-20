@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 public class TreningsApp {
     private Database database;
     private List<Ovelse> ovelser;
+    private List<Ovelse> ovelserDownloaded;
     private List<Okt> okter;
 
     public TreningsApp() {
@@ -34,6 +35,12 @@ public class TreningsApp {
         return sb.toString();
     }
 
+    public String listOvelserDownloaded() {
+        StringBuilder sb = new StringBuilder();
+
+        return sb.toString();
+    }
+
     public String listTable(String[] columns, String table) {
         String s;
         try {
@@ -48,61 +55,49 @@ public class TreningsApp {
         if (navn.equals("") || beskrivelse.equals("")) {
             throw new IllegalArgumentException("Ugyldig navn eller beskrivelse.");
         } else {
-            this.database.query(
-              "INSERT INTO `apparat` (`apparatnavn`, `apparatbrukbeskrivelse`) VALUES ('Tredemølle', 'Her kan man løpe.')"
+            this.database.update(
+            "INSERT INTO `apparat` (`apparatnavn`, `apparatbrukbeskrivelse`) VALUES ('" +
+                navn + "', '" + beskrivelse + "')"
             );
-
-//            this.database.query(
-//            "INSERT INTO `apparat` (`apparatnavn`, `apparatbrukbeskrivelse`) VALUES (" +
-//                 "'" + navn + "', '" + beskrivelse + "'" +
-//                ")"
-//            );
         }
     }
 
-    public void registrerOvelseApparat(String navn, String apparat, int kg, int sett) throws Exception {
-        //TODO: query for insertion ovesele m/apparat
-        this.database.query(
-        "INSERT INTO ovelseMedApparat (apparatnavn, apparatbruksbeskrivelse) VALUES (" +
-
-            ");"
-        );
-    }
-    public void registrerOvelseUtenApparat(String navn, String beskrivelse) {
-        try {
-            //TODO: query for insertion uten apparat
-            this.database.query(
-            "INSERT INTO ovelseUtenApparat () VALUES (" +
-
-                ");"
-            );
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    public String getApparatValg() {
+        String[] c = {"apparatid", "apparatNavn"};
+        String t = "apparat";
+        return this.database.select(c, t);
     }
 
     public void registrerOkt(Okt okt) { // TODO: Send inn økt og tilhørende øvelser i databasen
         try {
-            for (Ovelse o : okt.getOvelser()) { // For hver øvelse i økten, insert i ovelse
-                this.database.query(
-                "INSERT INTO ovelse (navn, antallkg, aparat, antallSett, tekstBeskrivelse) VALUES (" +
-                    o.getName() + ", " + o.getKg() + ", " + o.getApparat() + ", " + o.getSett() + " mangler beskrivelse atm " +
-                    ");"
-                );
+            for (Ovelse o : this.ovelser) { // For hver øvelse i økten, insert i ovelse
+                if (o.getHarApparat()) {
+                    this.database.update(
+                    "INSERT INTO `ovelse` (`navn`, `apparatID`, `antallkg`, `antallSett`) VALUES ('" +
+                        o.getName() + "', " + o.getApparatID() + ", " + o.getKg() + ", " + o.getSett() + ");"
+                    );
+                } else {
+                    this.database.update(
+                      "INSERT INTO `ovelse` (`navn`, `tekstBeskrivelse`) VALUES('" +
+                      o.getName() + "', '" + o.getBeskrivelse() + "')"
+                    );
+                }
             }
-            this.database.query( // TODO: Man må parse okt.getTidspunkt() og okt.getVarighet() til sql-tid fra String som de er nå!
-            "INSERT INTO treningsokt (dato, tidspunkt, varighet, form, prestasjon) VALUES (" +
+            this.database.update(
+            "INSERT INTO `treningsokt` (`dato`, `tidspunkt`, `varighet`, `form`, `prestasjon`) VALUES (" +
                 okt.getDato() + ", " + okt.getTidspunkt() + ", " + okt.getVarighet() + ", " + okt.getForm() + ", "+ okt.getPrestasjon() +
                 ");"
             );
-            this.database.query( // Of
-            "INSERT INTO treningsoktOvelse (oktid, ovelseid) VALUES (" +
+            this.database.update( // Of
+            "INSERT INTO `treningsoktOvelse` (`oktid`, `ovelseid`) VALUES (" +
                 //TODO: Hvordan får vi idene til øvelserne egt?
                 ");"
             );
-
+            //Flush dat shit
+            this.ovelser = new ArrayList<Ovelse>();
         } catch(Exception e) {
             e.printStackTrace();
+            throw e;
         }
 
     }

@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" prefHeight="630.0" prefWidth="401.0" style="-fx-background-color: #9efffa;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppController">
+<AnchorPane fx:id="root" prefHeight="630.0" prefWidth="401.0" style="-fx-background-color: #d0d0d0;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppController">
    <children>
       <TextArea fx:id="screen" layoutX="14.0" layoutY="14.0" prefHeight="264.0" prefWidth="377.0" wrapText="true" />
-      <TabPane layoutX="14.0" layoutY="301.0" prefHeight="315.0" prefWidth="377.0" style="-fx-background-color: FFFFFF;" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="14.0" layoutY="301.0"  prefHeight="315.0" prefWidth="377.0" style="-fx-background-color: FFFFFF;" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab text="Nytt apparat">
               <content>
@@ -24,7 +24,7 @@
                         <TextField fx:id="apparatNavn" layoutX="15.0" layoutY="31.0" prefHeight="27.0" prefWidth="219.0" />
                         <Label layoutX="14.0" layoutY="68.0" text="Beskrivelse" />
                         <TextArea fx:id="apparatBeskrivelse" layoutX="15.0" layoutY="85.0" prefHeight="98.0" prefWidth="219.0" />
-                        <Button layoutX="14.0" layoutY="203.0" onAction="#regApparat" mnemonicParsing="false" prefHeight="27.0" prefWidth="219.0" text="Legg til nytt apparat i databasen" />
+                        <Button layoutX="14.0" layoutY="203.0" mnemonicParsing="false" onAction="#regApparat" prefHeight="27.0" prefWidth="219.0" text="Legg til nytt apparat i databasen" />
                      </children>
                   </AnchorPane>
               </content>
@@ -33,7 +33,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TabPane prefHeight="319.0" prefWidth="377.0" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane prefHeight="286.0" prefWidth="377.0" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab text="Uten apparat">
                               <content>
@@ -50,12 +50,12 @@
                             </Tab>
                             <Tab text="Med apparat">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="252.0" prefWidth="377.0">
                                        <children>
                                           <Label layoutX="15.0" layoutY="14.0" text="Navn på øvelse" />
                                           <TextField fx:id="aparatOvelse" layoutX="15.0" layoutY="31.0" prefHeight="27.0" prefWidth="192.0" />
                                           <Label layoutX="15.0" layoutY="58.0" text="Navn på aparat" />
-                                          <TextField fx:id="aparatAparat" layoutX="15.0" layoutY="76.0" prefHeight="27.0" prefWidth="192.0" />
+                                          <ComboBox fx:id="aparatAparat" layoutX="15.0" layoutY="76.0" prefWidth="192.0" />
                                           <Label layoutX="14.0" layoutY="111.0" text="Antall kg" />
                                           <TextField fx:id="aparatKg" layoutX="14.0" layoutY="128.0" prefHeight="27.0" prefWidth="192.0" />
                                           <Label layoutX="14.0" layoutY="155.0" text="Antall sett" />
@@ -97,7 +97,6 @@
                      <children>
                         <Button layoutX="8.0" layoutY="14.0" mnemonicParsing="false" onAction="#showApparater" prefHeight="28.0" prefWidth="166.0" text="Apparater" textAlignment="CENTER" />
                         <Button layoutX="8.0" layoutY="42.0" mnemonicParsing="false" onAction="#showOvelser" prefHeight="28.0" prefWidth="166.0" text="Øvelser" textAlignment="CENTER" />
-                        <Button layoutX="8.0" layoutY="70.0" mnemonicParsing="false" onAction="#showOvelsesgrupper" prefHeight="28.0" prefWidth="166.0" text="Øvelsesgrupper" textAlignment="CENTER" />
                         <Button layoutX="8.0" layoutY="98.0" mnemonicParsing="false" onAction="#showTreningsokter" prefHeight="28.0" prefWidth="166.0" text="Treningsøkter" textAlignment="CENTER" />
                         <Button layoutX="8.0" layoutY="126.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="166.0" text="-" textAlignment="CENTER" />
                         <Button layoutX="8.0" layoutY="154.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="166.0" text="-" textAlignment="CENTER" />
