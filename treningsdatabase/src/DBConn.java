@@ -52,6 +52,115 @@ public abstract class DBConn {
         }
 
     }
+    public String getOkt(int id) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            this.connect();
+            Statement stmt = this.conn.createStatement();
+            System.out.println("Creating statement...");
+            String sql = "SELECT dato, tidspunkt, varighet, form, prestasjon " +
+                "FROM treningsokt WHERE treningsokt.oktid = " + id + ";";
+
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                sb.append(
+                    "Dato: " + rs.getString("dato") +
+                    "\t kl." + rs.getString("tidspunkt")+
+                    "\nVarighet: " + rs.getString("varighet") +
+                    "\t Form; " + rs.getString("form") + " / 10" +
+                    "\t Prestasjon: " + rs.getString("prestasjon") + " / 10"
+                );
+            }
+
+            rs.close();
+            stmt.close();
+            this.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sb.append(e.getMessage());
+        }
+        return sb.toString();
+    }
+
+    public String getOvelserOkt(int id) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            this.connect();
+            Statement stmt = this.conn.createStatement();
+            System.out.println("Creating statement...");
+            String sql =
+                "SELECT navn, dato, form, aparat, apparatID, tekstBeskrivelse, antallkg, antallSett, prestasjon, tidspunkt, varighet " +
+                "FROM ovelse " +
+                "NATURAL JOIN treningsoktOvelse " +
+                "NATURAL JOIN treningsokt " +
+                "WHERE treningsokt.oktid = " + id + ";";
+
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                sb.append("-> ");
+                if (rs.getString("aparat").equals("0")) {
+                    sb.append(
+                        "\t" + rs.getString("navn") +
+                        "\t" + rs.getString("tekstBeskrivelse")
+                    );
+                } else {
+                    sb.append(
+                        "\t" + rs.getString("navn") + "\t" +
+                        "\t" + "ApparatID = " + rs.getString("apparatID") + "\t" +
+                        "\t" + rs.getString("antallkg") + " kg * " +
+                               rs.getString("antallSett")
+                    );
+                }
+                sb.append("\n");
+            }
+            rs.close();
+            stmt.close();
+            this.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sb.append(e.getMessage());
+        }
+        return sb.toString();
+    }
+
+    public int getRowCount(String table) {
+        int antall = 0;
+        try {
+            this.connect();
+            Statement stmt = this.conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT count(*) FROM " + table);
+            rs.next();
+            antall = rs.getInt(1);
+            rs.close();
+            stmt.close();
+            this.conn.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return antall;
+    }
+
+    public String getOkter() {
+        String s;
+        try {
+            Statement stmt = null;
+            this.connect();
+            String sql = "SELECT * FROM `treningsokt`";
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            s = rs.toString();
+            rs.close();
+            stmt.close();
+            this.conn.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+            s = e.getMessage();
+        }
+        return s;
+    }
 
     public String select(String[] columns, String table) {
         Statement stmt = null;

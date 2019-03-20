@@ -9,10 +9,16 @@ public class TreningsApp {
     private List<Ovelse> ovelser;
     private List<Ovelse> ovelserDownloaded;
     private List<Okt> okter;
+    private int antallOkter;
+    private int antallOvelser;
 
     public TreningsApp() {
         this.ovelser = new ArrayList<Ovelse>();
         this.database = new Database("TreningsDatabasen");
+
+        this.antallOkter = database.getRowCount("treningsokt");
+        this.antallOvelser = database.getRowCount("ovelse");
+        System.out.println("Antall økter: " + antallOkter + ", antall øvelser: " + antallOvelser);
     }
 
     public String testConnection() {
@@ -41,6 +47,10 @@ public class TreningsApp {
         return sb.toString();
     }
 
+    public String listTreningsOkter() {
+        return this.database.getOkter();
+    }
+
     public String listTable(String[] columns, String table) {
         String s;
         try {
@@ -62,37 +72,50 @@ public class TreningsApp {
         }
     }
 
+    public String getOktMedOvelser(int id) {
+        return this.database.getOkt(id) + "\n" +
+               this.database.getOvelserOkt(id);
+    }
+
     public String getApparatValg() {
         String[] c = {"apparatid", "apparatNavn"};
         String t = "apparat";
         return this.database.select(c, t);
     }
 
+    public String getTreningsOktValg() {
+        String[] c = {"oktid", "dato", "tidspunkt"};
+        String t = "treningsokt";
+        return this.database.select(c, t);
+    }
+
     public void registrerOkt(Okt okt) { // TODO: Send inn økt og tilhørende øvelser i databasen
         try {
+            this.antallOkter ++;
+            this.database.update("INSERT INTO `treningsokt` (`oktid`, `dato`, `tidspunkt`, `varighet`, `form`, `prestasjon`) VALUES " +
+                    "(" + this.antallOkter + ", '" + okt.getDato() + "', '" + okt.getTidspunkt() +
+                    "', '" + okt.getVarighet() + "', " + okt.getForm() + ", " + okt.getPrestasjon() + ")"
+            );
+
             for (Ovelse o : this.ovelser) { // For hver øvelse i økten, insert i ovelse
+                this.antallOvelser ++;
                 if (o.getHarApparat()) {
                     this.database.update(
-                    "INSERT INTO `ovelse` (`navn`, `apparatID`, `antallkg`, `antallSett`) VALUES ('" +
-                        o.getName() + "', " + o.getApparatID() + ", " + o.getKg() + ", " + o.getSett() + ");"
+                    "INSERT INTO `ovelse` (`ovelseID`, `aparat`, `navn`, `apparatID`, `antallkg`, `antallSett`) VALUES (" +
+                        this.antallOvelser + ", 1, '" + o.getName() + "', " + o.getApparatID() + ", " + o.getKg() + ", " + o.getSett() + ");"
                     );
                 } else {
                     this.database.update(
-                      "INSERT INTO `ovelse` (`navn`, `tekstBeskrivelse`) VALUES('" +
-                      o.getName() + "', '" + o.getBeskrivelse() + "')"
+                      "INSERT INTO `ovelse` (`ovelseID`, `aparat`, `navn`, `tekstBeskrivelse`) VALUES(" +
+                          this.antallOvelser + ", 0, '" + o.getName() + "', '" + o.getBeskrivelse() + "')"
                     );
                 }
+                this.database.update( // Of
+                "INSERT INTO `treningsoktOvelse` (`oktid`, `ovelseid`) VALUES (" +
+                        this.antallOkter + ", " + this.antallOvelser +
+                    ");"
+                );
             }
-            this.database.update(
-            "INSERT INTO `treningsokt` (`dato`, `tidspunkt`, `varighet`, `form`, `prestasjon`) VALUES (" +
-                okt.getDato() + ", " + okt.getTidspunkt() + ", " + okt.getVarighet() + ", " + okt.getForm() + ", "+ okt.getPrestasjon() +
-                ");"
-            );
-            this.database.update( // Of
-            "INSERT INTO `treningsoktOvelse` (`oktid`, `ovelseid`) VALUES (" +
-                //TODO: Hvordan får vi idene til øvelserne egt?
-                ");"
-            );
             //Flush dat shit
             this.ovelser = new ArrayList<Ovelse>();
         } catch(Exception e) {

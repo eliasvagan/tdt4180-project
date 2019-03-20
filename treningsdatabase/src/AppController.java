@@ -29,6 +29,8 @@ public class AppController {
     @FXML ComboBox oktForm;
     @FXML ComboBox oktPrestasjon;
 
+    @FXML ComboBox treningsOktComboBox;
+
     private String errors = "";
     private TreningsApp app;
 
@@ -39,7 +41,7 @@ public class AppController {
 
     @FXML public void initialize(){
         updateScreen(this.app.testConnection());
-        updateApparatDropdown();
+        updateDropdowns();
 
         oktForm.getItems().removeAll(oktForm.getItems());
         oktPrestasjon.getItems().removeAll(oktPrestasjon.getItems());
@@ -52,15 +54,22 @@ public class AppController {
         oktPrestasjon.getSelectionModel().select(5);
     }
 
-    private void updateApparatDropdown() {
+    private void updateDropdowns() {
         try {
-            aparatAparat.getItems().removeAll(oktForm.getItems());
+            aparatAparat.getItems().removeAll(aparatAparat.getItems());
+            treningsOktComboBox.getItems().removeAll(treningsOktComboBox.getItems());
+
             for (String a : this.app.getApparatValg().split("\n")) {
                 aparatAparat.getItems().add(a);
             }
+            for (String a: this.app.getTreningsOktValg().split("\n")) {
+                treningsOktComboBox.getItems().add(a);
+            }
+            treningsOktComboBox.getSelectionModel().select(0);
             aparatAparat.getSelectionModel().select(0);
         } catch(Exception e) {
             this.updateScreen(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -72,7 +81,7 @@ public class AppController {
             );
             this.showApparater();
             this.clearFields();
-            this.updateApparatDropdown();
+            this.updateDropdowns();
         } catch (Exception e){
             this.updateScreen(e.getMessage());
         }
@@ -145,6 +154,7 @@ public class AppController {
             );
             this.app.registrerOkt(okt);
             this.showTreningsokter();
+            this.updateDropdowns();
         } catch(Exception e) {
             updateScreen(e.getMessage());
         }
@@ -163,25 +173,33 @@ public class AppController {
         this.errors = "";
     }
 
-    @FXML
-    private void showApparater() {
+    @FXML private void showApparater() {
         String[] kolonner = {"apparatid", "apparatnavn", "apparatbrukbeskrivelse"};
         String tabell = "apparat";
         this.updateScreen(app.listTable(kolonner, tabell));
     }
-    @FXML
-    private void showOvelser() {
+    @FXML private void showOvelser() {
         String[] kolonner = {"ovelseid", "navn", "antallkg", "aparat", "apparatid", "antallSett", "apparatID", "tekstBeskrivelse"};
         String tabell = "ovelse";
         this.updateScreen(app.listTable(kolonner, tabell));
-
     }
-
-    @FXML
-    private void showTreningsokter() {
+    @FXML private void showTreningsokter() {
         String[] kolonner = {"oktid", "dato", "tidspunkt", "varighet", "form", "prestasjon"};
         String tabell = "treningsokt";
         this.updateScreen(app.listTable(kolonner, tabell));
+//        this.updateScreen(app.listTreningsOkter());
+    }
+    @FXML private void showTreningsOktOvingRelasjoner() {
+        String[] kolonner = {"oktid", "ovelseid"};
+        String tabell = "treningsoktOvelse";
+        this.updateScreen(app.listTable(kolonner, tabell));
+    }
+    @FXML private void showSelectedOkt() {
+        this.updateScreen(
+            this.app.getOktMedOvelser(
+                Character.getNumericValue(treningsOktComboBox.getSelectionModel().getSelectedItem().toString().charAt(0))
+            )
+        );
     }
 
     private void clearFields() {
