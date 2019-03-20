@@ -43,8 +43,10 @@ public abstract class DBConn {
             System.out.println("Creating statement...\n" + sql);
             Statement stmt = this.conn.createStatement();
             stmt.executeQuery(sql);
+            System.out.println("Successfully executed query.");
             stmt.close();
             this.conn.close();
+
         } catch(Exception e) {
             throw new RuntimeException("Feil ved SQL-query", e);
         }

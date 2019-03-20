@@ -13,6 +13,9 @@ import java.util.List;
 public class AppController {
     @FXML TextArea screen;
 
+    @FXML TextField apparatNavn;
+    @FXML TextArea apparatBeskrivelse;
+
     @FXML TextField aparatOvelse;
     @FXML TextField aparatAparat;
     @FXML TextField aparatKg;
@@ -47,7 +50,19 @@ public class AppController {
         oktPrestasjon.getSelectionModel().select(5);
     }
 
-    @FXML public void regOvingAparat(){
+    @FXML private void regApparat() {
+        try {
+            this.app.registrerApparat(
+                apparatNavn.getText(),
+                apparatBeskrivelse.getText()
+            );
+        } catch (Exception e){
+            this.updateScreen(e.getMessage());
+        }
+
+    }
+
+    @FXML private void regOvingAparat(){
         if (aparatOvelse.getText().equals("") ||
             aparatAparat.getText().equals("") ||
             aparatKg.getText().equals("") ||
@@ -81,7 +96,7 @@ public class AppController {
         updateScreen();
     }
 
-    @FXML public void regOvingUten(){
+    @FXML private void regOvingUten(){
         if (utenOvelse.getText().equals("") ||
             utenBeskrivelse.getText().equals(""))
         {

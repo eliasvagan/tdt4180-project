@@ -2,6 +2,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TreningsApp {
     private Database database;
@@ -43,17 +44,29 @@ public class TreningsApp {
         return s;
     }
 
-    public void registrerOvelseApparat(String navn, String apparat, int kg, int sett) {
-        try {
-            //TODO: query for insertion apparat
+    public void registrerApparat(String navn, String beskrivelse) throws Exception {
+        if (navn.equals("") || beskrivelse.equals("")) {
+            throw new IllegalArgumentException("Ugyldig navn eller beskrivelse.");
+        } else {
             this.database.query(
-            "INSERT INTO ovelseMedApparat () VALUES (" +
-
-                ");"
+              "INSERT INTO `apparat` (`apparatnavn`, `apparatbrukbeskrivelse`) VALUES ('Tredemølle', 'Her kan man løpe.')"
             );
-        } catch(Exception e) {
-            e.printStackTrace();
+
+//            this.database.query(
+//            "INSERT INTO `apparat` (`apparatnavn`, `apparatbrukbeskrivelse`) VALUES (" +
+//                 "'" + navn + "', '" + beskrivelse + "'" +
+//                ")"
+//            );
         }
+    }
+
+    public void registrerOvelseApparat(String navn, String apparat, int kg, int sett) throws Exception {
+        //TODO: query for insertion ovesele m/apparat
+        this.database.query(
+        "INSERT INTO ovelseMedApparat (apparatnavn, apparatbruksbeskrivelse) VALUES (" +
+
+            ");"
+        );
     }
     public void registrerOvelseUtenApparat(String navn, String beskrivelse) {
         try {
