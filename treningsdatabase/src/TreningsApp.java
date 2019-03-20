@@ -41,16 +41,6 @@ public class TreningsApp {
         return sb.toString();
     }
 
-    public String listOvelserDownloaded() {
-        StringBuilder sb = new StringBuilder();
-
-        return sb.toString();
-    }
-
-    public String listTreningsOkter() {
-        return this.database.getOkter();
-    }
-
     public String listTable(String[] columns, String table) {
         String s;
         try {
@@ -89,12 +79,17 @@ public class TreningsApp {
         return this.database.select(c, t);
     }
 
+    public String getOkterN(int n) {
+        return this.database.getOkterN(n);
+    }
+
     public void registrerOkt(Okt okt) { // TODO: Send inn økt og tilhørende øvelser i databasen
         try {
             this.antallOkter ++;
-            this.database.update("INSERT INTO `treningsokt` (`oktid`, `dato`, `tidspunkt`, `varighet`, `form`, `prestasjon`) VALUES " +
+            this.database.update("INSERT INTO `treningsokt` (`oktid`, `dato`, `tidspunkt`, `varighet`, `form`, `prestasjon`, `oktnotat`) VALUES " +
                     "(" + this.antallOkter + ", '" + okt.getDato() + "', '" + okt.getTidspunkt() +
-                    "', '" + okt.getVarighet() + "', " + okt.getForm() + ", " + okt.getPrestasjon() + ")"
+                    "', '" + okt.getVarighet() + "', " + okt.getForm() + ", " + okt.getPrestasjon() +
+                    ", '" + okt.getNotat() + "')"
             );
 
             for (Ovelse o : this.ovelser) { // For hver øvelse i økten, insert i ovelse

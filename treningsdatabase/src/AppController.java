@@ -28,8 +28,11 @@ public class AppController {
     @FXML TextField oktVarighet;
     @FXML ComboBox oktForm;
     @FXML ComboBox oktPrestasjon;
+    @FXML TextArea oktNotat;
 
     @FXML ComboBox treningsOktComboBox;
+
+    @FXML TextField queryAntallOkter;
 
     private String errors = "";
     private TreningsApp app;
@@ -150,7 +153,8 @@ public class AppController {
                 oktTidspunkt.getText(),
                 oktVarighet.getText(),
                 Integer.parseInt(oktForm.getSelectionModel().getSelectedItem().toString()),
-                Integer.parseInt(oktPrestasjon.getSelectionModel().getSelectedItem().toString())
+                Integer.parseInt(oktPrestasjon.getSelectionModel().getSelectedItem().toString()),
+                oktNotat.getText()
             );
             this.app.registrerOkt(okt);
             this.showTreningsokter();
@@ -201,6 +205,11 @@ public class AppController {
             )
         );
     }
+    @FXML private void showOkterN() {
+        this.updateScreen(
+            app.getOkterN(Integer.parseInt(this.queryAntallOkter.getText()))
+        );
+    }
 
     private void clearFields() {
         this.aparatOvelse.setText("");
@@ -210,6 +219,8 @@ public class AppController {
         this.utenBeskrivelse.setText("");
         this.apparatNavn.setText("");
         this.apparatBeskrivelse.setText("");
+        this.oktNotat.setText("");
+        this.queryAntallOkter.setText("");
     }
 
 

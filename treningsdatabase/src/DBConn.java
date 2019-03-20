@@ -52,13 +52,50 @@ public abstract class DBConn {
         }
 
     }
+    public String getOkterN(int n){
+        StringBuilder sb = new StringBuilder();
+        try {
+            this.connect();
+            Statement stmt = this.conn.createStatement();
+            System.out.println("Creating statement...");
+            String sql =
+                "SELECT * " +
+                "FROM treningsokt " +
+                "WHERE oktnotat IS NOT NULL " +
+                "ORDER BY dato DESC " +
+                "LIMIT " + n + ";";
+
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                sb.append(
+                "Dato: " + rs.getString("dato") +
+                "\t kl." + rs.getString("tidspunkt")+
+                "\nVarighet: " + rs.getString("varighet") +
+                "\t Form; " + rs.getString("form") + " / 10" +
+                "\t Prestasjon: " + rs.getString("prestasjon") + " / 10" +
+                "\nNotat til økten: \n" + rs.getString("oktnotat") + "\n"
+                );
+            }
+
+            rs.close();
+            stmt.close();
+            this.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            sb.append(e.getMessage());
+        }
+        return sb.toString();
+    }
+
     public String getOkt(int id) {
         StringBuilder sb = new StringBuilder();
         try {
             this.connect();
             Statement stmt = this.conn.createStatement();
             System.out.println("Creating statement...");
-            String sql = "SELECT dato, tidspunkt, varighet, form, prestasjon " +
+            String sql = "SELECT dato, tidspunkt, varighet, form, prestasjon, oktnotat " +
                 "FROM treningsokt WHERE treningsokt.oktid = " + id + ";";
 
             System.out.println(sql);
@@ -70,7 +107,9 @@ public abstract class DBConn {
                     "\t kl." + rs.getString("tidspunkt")+
                     "\nVarighet: " + rs.getString("varighet") +
                     "\t Form; " + rs.getString("form") + " / 10" +
-                    "\t Prestasjon: " + rs.getString("prestasjon") + " / 10"
+                    "\t Prestasjon: " + rs.getString("prestasjon") + " / 10" +
+                    (rs.getString("oktnotat").equals("") ? ""
+                    : "\nNotat til økten: \n" + rs.getString("oktnotat"))
                 );
             }
 
@@ -141,25 +180,6 @@ public abstract class DBConn {
             e.printStackTrace();
         }
         return antall;
-    }
-
-    public String getOkter() {
-        String s;
-        try {
-            Statement stmt = null;
-            this.connect();
-            String sql = "SELECT * FROM `treningsokt`";
-            System.out.println(sql);
-            ResultSet rs = stmt.executeQuery(sql);
-            s = rs.toString();
-            rs.close();
-            stmt.close();
-            this.conn.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-            s = e.getMessage();
-        }
-        return s;
     }
 
     public String select(String[] columns, String table) {

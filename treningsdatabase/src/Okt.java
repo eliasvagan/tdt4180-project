@@ -11,14 +11,16 @@ public class Okt {
     private String varighet;
     private int form;
     private int prestasjon;
+    private String notat;
 
-    public Okt(LocalDate dato, String tidspunkt, String varighet, int form, int prestasjon) {
+    public Okt(LocalDate dato, String tidspunkt, String varighet, int form, int prestasjon, String notat) {
         this.dato = dato;
         this.tidspunkt = tidspunkt;
         this.varighet = varighet;
         this.form = form;
         this.prestasjon = prestasjon;
         this.ovelser = new ArrayList<Ovelse>();
+        this.notat = notat;
     }
     public void addOvelse(Ovelse o) {
         this.ovelser.add(o);
@@ -57,6 +59,10 @@ public class Okt {
 
     public int getForm() {
         return form;
+    }
+
+    public String getNotat() {
+        return this.notat;
     }
 
     public int getPrestasjon() {

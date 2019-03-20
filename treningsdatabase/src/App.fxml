@@ -11,10 +11,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" prefHeight="630.0" prefWidth="401.0" style="-fx-background-color: #d0d0d0;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppController">
+<AnchorPane fx:id="root" prefHeight="659.0" prefWidth="401.0" style="-fx-background-color: #d0d0d0;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppController">
    <children>
-      <TextArea fx:id="screen" layoutX="14.0" layoutY="14.0" prefHeight="264.0" prefWidth="377.0" wrapText="true" />
-      <TabPane layoutX="14.0" layoutY="301.0" prefHeight="315.0" prefWidth="377.0" style="-fx-background-color: FFFFFF;" tabClosingPolicy="UNAVAILABLE">
+      <TextArea fx:id="screen" layoutX="12.0" layoutY="27.0" prefHeight="297.0" prefWidth="377.0" wrapText="true" />
+      <TabPane layoutX="12.0" layoutY="330.0" prefHeight="315.0" prefWidth="377.0" style="-fx-background-color: FFFFFF;" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab text="Nytt apparat">
               <content>
@@ -85,8 +85,9 @@
                         <ComboBox fx:id="oktForm" layoutX="16.0" layoutY="167.0" prefWidth="150.0" />
                         <Label layoutX="14.0" layoutY="194.0" text="Prestasjon" />
                         <ComboBox fx:id="oktPrestasjon" layoutX="16.0" layoutY="211.0" prefWidth="150.0" />
-                        <Button layoutX="17.0" layoutY="247.0" mnemonicParsing="false" onAction="#registrerOkt" prefHeight="25.0" prefWidth="148.0" text="Registrer økt" />
-                        <Text layoutX="190.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Økten registreres i databasen med alle øvelserne esom er blitt oppgitt på forhånd." wrappingWidth="172.13671875" />
+                        <Button layoutX="17.0" layoutY="247.0" mnemonicParsing="false" onAction="#registrerOkt" prefHeight="25.0" prefWidth="343.0" text="Registrer økt" />
+                        <TextArea fx:id="oktNotat" layoutX="176.0" layoutY="117.0" prefHeight="121.0" prefWidth="184.0" />
+                        <Label layoutX="176.0" layoutY="101.0" text="Notat til økten" />
                      </children>
                   </AnchorPane>
               </content>
@@ -99,14 +100,18 @@
                         <Button layoutX="8.0" layoutY="42.0" mnemonicParsing="false" onAction="#showOvelser" prefHeight="28.0" prefWidth="166.0" text="Øvelser" textAlignment="CENTER" />
                         <Button layoutX="8.0" layoutY="70.0" mnemonicParsing="false" onAction="#showTreningsokter" prefHeight="28.0" prefWidth="166.0" text="Treningsøkter" textAlignment="CENTER" />
                         <Button layoutX="8.0" layoutY="98.0" mnemonicParsing="false" onAction="#showTreningsOktOvingRelasjoner" prefHeight="28.0" prefWidth="166.0" text="Økt-Øvelse-relasjoner" textAlignment="CENTER" />
-                        <ComboBox fx:id="treningsOktComboBox" layoutX="8.0" layoutY="198.0" prefHeight="25.0" prefWidth="166.0" />
-                        <Label layoutX="8.0" layoutY="180.0" text="Se på en trenignsøkt" />
-                        <Button layoutX="181.0" onAction="#showSelectedOkt" layoutY="197.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="44.0" text="Vis" textAlignment="CENTER" />
+                        <ComboBox fx:id="treningsOktComboBox" layoutX="8.0" layoutY="161.0" prefHeight="25.0" prefWidth="166.0" />
+                        <Label layoutX="8.0" layoutY="143.0" text="Se på en treningsøkt" />
+                        <Button layoutX="181.0" layoutY="160.0" mnemonicParsing="false" onAction="#showSelectedOkt" prefHeight="28.0" prefWidth="44.0" text="Vis" textAlignment="CENTER" />
+                        <Label layoutX="8.0" layoutY="198.0" text="Se på flere treningsøkter" />
+                        <TextField fx:id="queryAntallOkter" layoutX="8.0" layoutY="215.0" prefHeight="27.0" prefWidth="165.0" promptText="Hvor mange vil du se?" />
+                        <Button layoutX="181.0" layoutY="215.0" mnemonicParsing="false" onAction="#showOkterN" prefHeight="28.0" prefWidth="44.0" text="Vis" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
         </tabs>
       </TabPane>
+      <Text fill="#ff00f6" layoutX="156.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Treningsappen:-)" />
    </children>
 </AnchorPane>
