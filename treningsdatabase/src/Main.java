@@ -17,7 +17,7 @@ public class Main extends Application {
         Thread.currentThread().setName("JavaFX");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
 
-        AnchorPane root = (AnchorPane) loader.load();
+        AnchorPane root = loader.load();
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);

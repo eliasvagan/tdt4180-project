@@ -51,7 +51,7 @@ public class TreningsApp {
         return s;
     }
 
-    public void registrerApparat(String navn, String beskrivelse) throws Exception {
+    public void registrerApparat(String navn, String beskrivelse) {
         if (navn.equals("") || beskrivelse.equals("")) {
             throw new IllegalArgumentException("Ugyldig navn eller beskrivelse.");
         } else {
@@ -79,11 +79,24 @@ public class TreningsApp {
         return this.database.select(c, t);
     }
 
+    public String getOvelserMellomValg() {
+        String[] c = {"navn"};
+        String t = "ovelse";
+        return this.database.select(c, t);
+    }
+
     public String getOkterN(int n) {
         return this.database.getOkterN(n);
     }
 
+    public String getOkterBetween(String date0, String date1, String name) {
+        return this.database.getOkterBetween(date0, date1, name);
+    }
+
     public void registrerOkt(Okt okt) { // TODO: Send inn økt og tilhørende øvelser i databasen
+        if (this.ovelser.size() == 0) {
+            throw new IllegalArgumentException("Du har ikke lagt til noen øvelser!");
+        }
         try {
             this.antallOkter ++;
             this.database.update("INSERT INTO `treningsokt` (`oktid`, `dato`, `tidspunkt`, `varighet`, `form`, `prestasjon`, `oktnotat`) VALUES " +

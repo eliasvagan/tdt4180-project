@@ -17,7 +17,8 @@ public class MySqlLoadDriver {
             listDrivers();
 
         } catch (Exception e) {
-            System.err.println("Exception: "+e.getMessage());
+            System.err.println("Exception: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     private static void listDrivers() {

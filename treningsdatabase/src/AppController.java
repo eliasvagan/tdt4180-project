@@ -34,6 +34,10 @@ public class AppController {
 
     @FXML TextField queryAntallOkter;
 
+    @FXML ComboBox velgOktMellom;
+    @FXML DatePicker dateFrom;
+    @FXML DatePicker dateTo;
+
     private String errors = "";
     private TreningsApp app;
 
@@ -61,6 +65,7 @@ public class AppController {
         try {
             aparatAparat.getItems().removeAll(aparatAparat.getItems());
             treningsOktComboBox.getItems().removeAll(treningsOktComboBox.getItems());
+            velgOktMellom.getItems().removeAll(velgOktMellom.getItems());
 
             for (String a : this.app.getApparatValg().split("\n")) {
                 aparatAparat.getItems().add(a);
@@ -68,8 +73,13 @@ public class AppController {
             for (String a: this.app.getTreningsOktValg().split("\n")) {
                 treningsOktComboBox.getItems().add(a);
             }
+            for (String a: this.app.getOvelserMellomValg().split("\n")) {
+                velgOktMellom.getItems().add(a);
+            }
+
             treningsOktComboBox.getSelectionModel().select(0);
             aparatAparat.getSelectionModel().select(0);
+            velgOktMellom.getSelectionModel().select(0);
         } catch(Exception e) {
             this.updateScreen(e.getMessage());
             e.printStackTrace();
@@ -208,6 +218,15 @@ public class AppController {
     @FXML private void showOkterN() {
         this.updateScreen(
             app.getOkterN(Integer.parseInt(this.queryAntallOkter.getText()))
+        );
+    }
+    @FXML private void showOkterBetween() {
+        this.updateScreen(
+            app.getOkterBetween(
+                dateFrom.getValue().toString(),
+                dateTo.getValue().toString(),
+                velgOktMellom.getSelectionModel().getSelectedItem().toString().trim()
+            )
         );
     }
 

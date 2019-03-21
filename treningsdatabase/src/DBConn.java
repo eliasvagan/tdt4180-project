@@ -52,6 +52,44 @@ public abstract class DBConn {
         }
 
     }
+
+    public String getOkterBetween(String date0, String date1, String name) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            this.connect();
+            Statement stmt = this.conn.createStatement();
+            System.out.println("Creating statement ...");
+
+            String sql =
+                "SELECT navn, varighet, form, prestasjon, dato " +
+                "FROM ovelse " +
+                    "INNER JOIN treningsoktOvelse INNER JOIN treningsokt " +
+                    "WHERE navn='" + name + "' AND (dato >= " + date0 + " AND dato <=" + date1 + ");";
+
+            System.out.println(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                sb.append(
+                    rs.getString("navn") + ", Varighet: " +
+                    rs.getString("varighet") + ", Form: " +
+                    rs.getString("form") + " / 10, Prestasjon: " +
+                    rs.getString("prestasjon") + "\n"
+                );
+            }
+            rs.close();
+            stmt.close();
+            this.disconnect();
+
+            if (sb.toString().equals("")){
+                sb.append("Ingen resultater.");
+            }
+        } catch (Exception e) {
+            sb.append(e.getMessage());
+            e.printStackTrace();
+        }
+        return sb.toString();
+    }
+
     public String getOkterN(int n){
         StringBuilder sb = new StringBuilder();
         try {
